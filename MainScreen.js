@@ -11,7 +11,8 @@ import {
   Dimensions,
   TouchableNativeFeedback,
   TouchableOpacity,
-  TouchableHighlight 
+  TouchableHighlight,
+  RefreshControl 
 } from 'react-native';
 
 var API_LATEST_URL = "http://news-at.zhihu.com/api/4/news/latest";
@@ -31,6 +32,7 @@ export default class MainScreen extends Component {
       }),
       isLoading: false,
       isLoadingTail: false,
+      isRefresh: false,
     };
   }
 
@@ -114,10 +116,25 @@ export default class MainScreen extends Component {
     )
   }
 
+  onRefresh() {
+    this.setState({isRefresh: true});
+    datas = [];
+    isFirstin = true;
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+        isLoadingTail: false,
+        isRefresh: false
+      });
+
+      this.loadLatest(true);
+    }, 1500); 
+  }
+
   render() {
-    if (this.state.isLoading) {
+    if (this.state.isLoadingTail) {
       return (
-        <View style={[styles.container, styles.center]}>
+        <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
           <Text>
             正在加载...
           </Text>
@@ -130,15 +147,25 @@ export default class MainScreen extends Component {
             titleColor={'#ffffff'}
             style={styles.toolbar}
             title={'Daily'}/>
-          <ListView
-            dataSource={this.state.dataSource}
-            renderRow={this.renderLatest.bind(this)}
-            onEndReached={this.onEndReached.bind(this)}
-            onEndReachedThreshold={datas.length}
-            style={styles.listView}>
-          </ListView>
-      </View>
-    )
+          <View style={styles.listContent}>
+            <ListView
+              dataSource={this.state.dataSource}
+              renderRow={this.renderLatest.bind(this)}
+              onEndReached={this.onEndReached.bind(this)}
+              onEndReachedThreshold={datas.length}
+              style={styles.listView}
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.isRefresh}
+                  onRefresh={this.onRefresh.bind(this)}
+                  colors={['#ff0000', '#00ff00', '#0000ff']}
+                  progressBackgroundColor="#ffffff"
+                />
+              }>
+            </ListView>
+          </View>
+        </View>
+      )
     }
   }
 }
@@ -148,6 +175,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5FCFF',
     flexDirection: 'column',
+  },
+
+  listContent: {
+    flex: 1,
+    flexDirection: 'column',
+    paddingLeft: 10,
+    paddingRight: 10,
   },
 
   title: {
@@ -176,7 +210,7 @@ const styles = StyleSheet.create({
   },
 
   listView: {
-    padding: 10,
+    padding: 0,
   },
 
   toolbar: {

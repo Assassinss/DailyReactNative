@@ -177,21 +177,21 @@ const styles = StyleSheet.create({
 
   content: {
     flex: 1,
-    position: 'absolute',
     left: 0,
     right: 0,
     bottom: 0,
-    top:56,
+    top:0,
   },
 
   navIcon: {
     width: 24,
     height: 24,
-    marginRight: 16,
+    marginRight: 32,
   },
 
   navTitle: {
-    fontSize: 22,
+    fontSize: 20,
     color: '#ffffff',
+    fontWeight: 'bold'
   }
 });

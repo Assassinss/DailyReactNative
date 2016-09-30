@@ -32,6 +32,7 @@ export default class SplashScreen extends Component {
         console.error(error);
       })
       .done();
+      data.updateCover();
   }
 
   componentDidMount() {
