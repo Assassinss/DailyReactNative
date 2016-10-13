@@ -45,13 +45,13 @@ class DailyReactNative extends Component {
 
   renderScene(route, navigator) {
     _navigator = navigator;
-    if (route.name == 'home') {
+    if (route.name === 'home') {
       return (
         <View style={styles.container}>
           <MainScreen navigator={navigator} />
         </View>
       )
-    } else if (route.name == 'stories') {
+    } else if (route.name === 'stories') {
       return (
         <View style={styles.container}>
           <StoryDetail 

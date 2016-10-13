@@ -41,7 +41,7 @@ export default class SplashScreen extends Component {
     Animated.timing(                        
       this.state.bounceValue,                
       {
-        toValue: 1.2,                       
+        toValue: 1.3,                       
         duration: 5000,                       
       }
     ).start();           
