@@ -73,9 +73,9 @@ export default class MainScreen extends Component {
   }
 
   addDatas(stories) {
-    for (var i = 0; i < stories.length; i++) {
-      datas.push(stories[i]);
-    }
+    stories.forEach(storie => {
+      datas.push(storie);
+    })
   }
 
   getDataSource(stories) {
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   },
 
   toolbar: {
-    backgroundColor: '#009688',
+    backgroundColor: '#000000',
     height: 56,
   }
 });

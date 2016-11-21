@@ -38,6 +38,7 @@ export default class StoryDetail extends Component {
 
   loadStoryDetail() {
     var url = STORY_URL + this.props.stories.id;
+    console.log("url: " + url);
     this.setState({
       isLoading: true,
       detail: null
@@ -89,12 +90,6 @@ export default class StoryDetail extends Component {
           + '</body></html>';
         return (
           <View style={styles.container}>
-            <View style={styles.toolbar}>
-              <TouchableOpacity onPress={this.onExit.bind(this)}>
-                 <Image style={styles.navIcon} source={require('image!ic_back_white')}/>
-              </TouchableOpacity>
-              <Text style={styles.navTitle}>Story</Text>
-            </View>
             <MyWebView
               style={styles.content}
               html={html}
@@ -111,6 +106,14 @@ export default class StoryDetail extends Component {
                 </View> 
               </Image>
             </Animated.View>
+            <View style={styles.toolbarView}>
+              <View style={styles.toolbar}>
+                <TouchableOpacity onPress={this.onExit.bind(this)}>
+                  <Image style={styles.navIcon} source={require('image!ic_back_white')}/>
+                </TouchableOpacity>
+                <Text style={styles.navTitle}>Story</Text>
+              </View>
+            </View>
           </View> 
         )
       } else {
@@ -128,13 +131,21 @@ export default class StoryDetail extends Component {
 
 const styles = StyleSheet.create({
   toolbar: {
-    backgroundColor: '#009688',
+    backgroundColor: '#000000',
     height: 56,
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingLeft: 16,
     paddingRight: 16,
     flexDirection: 'row'
+  },
+
+  toolbarView: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0
   },
 
   header: {
@@ -180,7 +191,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    top:0,
+    top:56,
   },
 
   navIcon: {
