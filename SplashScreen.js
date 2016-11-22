@@ -3,8 +3,8 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text, 
-  StyleSheet 
+  Text,
+  StyleSheet
 } from 'react-native';
 
 import Animated from 'Animated';
@@ -24,35 +24,35 @@ export default class SplashScreen extends Component {
   loadData() {
     data.getCover()
       .then((result) => {
-        if(result) {
-          this.setState({img: result.img});
+        if (result) {
+          this.setState({ img: result.img });
         }
       })
       .catch((error) => {
         console.error(error);
       })
       .done();
-      data.updateCover();
+    data.updateCover();
   }
 
   componentDidMount() {
     this.loadData();
     this.state.bounceValue.setValue(1);
-    Animated.timing(                        
-      this.state.bounceValue,                
+    Animated.timing(
+      this.state.bounceValue,
       {
-        toValue: 1.3,                       
-        duration: 5000,                       
+        toValue: 1.3,
+        duration: 5000,
       }
-    ).start();           
+    ).start();
   }
 
   render() {
     var cover;
-    if(this.state.img) {
-      cover = {uri: this.state.img}
+    if (this.state.img) {
+      cover = { uri: this.state.img }
     } else {
-      cover = {uri: 'https://pic4.zhimg.com/v2-b427763c3d75885c041d4de069923e93.jpg'};
+      cover = { uri: 'https://pic4.zhimg.com/v2-b427763c3d75885c041d4de069923e93.jpg' };
     }
     return (
       <Animated.Image
@@ -60,10 +60,10 @@ export default class SplashScreen extends Component {
         style={{
           flex: 1,
           transform: [
-            {scale: this.state.bounceValue},
+            { scale: this.state.bounceValue },
           ]
         }}
-      />
+        />
     );
   }
 }

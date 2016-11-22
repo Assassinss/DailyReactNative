@@ -17,8 +17,8 @@ import StoryDetail from './StoryDetail';
 
 var _navigator;
 
-BackAndroid.addEventListener('hardwareBackPress', function() {
-  if(_navigator && _navigator.getCurrentRoutes().length > 1) {
+BackAndroid.addEventListener('hardwareBackPress', function () {
+  if (_navigator && _navigator.getCurrentRoutes().length > 1) {
     _navigator.pop();
     return true;
   }
@@ -29,7 +29,7 @@ class DailyReactNative extends Component {
   componentDidMount() {
     this.timer = setTimeout(
       () => {
-        this.setState({splashed: true});
+        this.setState({ splashed: true });
       }, 2000
     )
   }
@@ -54,29 +54,29 @@ class DailyReactNative extends Component {
     } else if (route.name === 'stories') {
       return (
         <View style={styles.container}>
-          <StoryDetail 
-            style={{flex: 1}}
+          <StoryDetail
+            style={{ flex: 1 }}
             navigator={navigator}
             stories={route.stories}
-          />
+            />
         </View>
       )
     }
   }
 
   render() {
-    if(this.state.splashed) {
-      var route = {name: 'home'};
+    if (this.state.splashed) {
+      var route = { name: 'home' };
       return (
-        <Navigator 
+        <Navigator
           style={styles.container}
           initialRoute={route}
           configureScene={this.configureScene}
           renderScene={this.renderScene}
-        />
+          />
       );
     } else {
-       return <SplashScreen />
+      return <SplashScreen />
     }
   }
 }

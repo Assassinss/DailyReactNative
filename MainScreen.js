@@ -1,10 +1,10 @@
 'user strict'
 
 import React, { Component } from 'react';
-import { 
+import {
   View,
   Text,
-  Image, 
+  Image,
   StyleSheet,
   ToolbarAndroid,
   ListView,
@@ -12,7 +12,7 @@ import {
   TouchableNativeFeedback,
   TouchableOpacity,
   TouchableHighlight,
-  RefreshControl 
+  RefreshControl
 } from 'react-native';
 
 var API_LATEST_URL = "http://news-at.zhihu.com/api/4/news/latest";
@@ -43,14 +43,14 @@ export default class MainScreen extends Component {
   getDate(dayCount) {
     newDate.setDate(newDate.getDate() + dayCount);
     var yyyy = newDate.getFullYear().toString();
-    var mm = (newDate.getMonth()+1).toString();
-    var dd  = newDate.getDate().toString();
-    return yyyy + (mm[1]?mm:"0"+mm[0]) + (dd[1]?dd:"0"+dd[0]);
+    var mm = (newDate.getMonth() + 1).toString();
+    var dd = newDate.getDate().toString();
+    return yyyy + (mm[1] ? mm : "0" + mm[0]) + (dd[1] ? dd : "0" + dd[0]);
   }
 
   loadLatest(isRefresh) {
     var api;
-    if (!isFirstin) api = API_BEFORE_URL + this.getDate(dayCount); 
+    if (!isFirstin) api = API_BEFORE_URL + this.getDate(dayCount);
     else api = API_LATEST_URL;
     fetch(api)
       .then((response) => response.json())
@@ -101,13 +101,13 @@ export default class MainScreen extends Component {
   }
 
   renderLatest(stories) {
-    return(
-      <TouchableOpacity style={{flex: 1}} 
+    return (
+      <TouchableOpacity style={{ flex: 1 }}
         onPress={this.selectDaily.bind(this, stories)}>
         <View style={styles.row}>
-          <Image 
-            source={{uri: stories.images[0]}}
-            style={styles.thumbnail}/>
+          <Image
+            source={{ uri: stories.images[0] }}
+            style={styles.thumbnail} />
           <Text
             style={styles.title}>{stories.title}
           </Text>
@@ -117,7 +117,7 @@ export default class MainScreen extends Component {
   }
 
   onRefresh() {
-    this.setState({isRefresh: true});
+    this.setState({ isRefresh: true });
     datas = [];
     isFirstin = true;
     setTimeout(() => {
@@ -128,13 +128,13 @@ export default class MainScreen extends Component {
       });
 
       this.loadLatest(true);
-    }, 1500); 
+    }, 1500);
   }
 
   render() {
     if (this.state.isLoadingTail) {
       return (
-        <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>
             正在加载...
           </Text>
@@ -146,7 +146,7 @@ export default class MainScreen extends Component {
           <ToolbarAndroid
             titleColor={'#ffffff'}
             style={styles.toolbar}
-            title={'Daily'}/>
+            title={'Daily'} />
           <View style={styles.listContent}>
             <ListView
               dataSource={this.state.dataSource}
@@ -160,7 +160,7 @@ export default class MainScreen extends Component {
                   onRefresh={this.onRefresh.bind(this)}
                   colors={['#ff0000', '#00ff00', '#0000ff']}
                   progressBackgroundColor="#ffffff"
-                />
+                  />
               }>
             </ListView>
           </View>

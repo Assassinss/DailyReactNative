@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text, 
+  Text,
   StyleSheet,
   ToolbarAndroid,
   Image,
@@ -12,7 +12,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import MyWebView from './WebView'; 
+import MyWebView from './WebView';
 
 var STORY_URL = "http://news-at.zhihu.com/api/4/news/";
 
@@ -84,7 +84,7 @@ export default class StoryDetail extends Component {
         var translateY = this.state.scrollValue.interpolate({
           inputRange: [0, HEADER_SIZE, HEADER_SIZE + 1], outputRange: [0, HEADER_SIZE, HEADER_SIZE]
         });
-         var html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="'
+        var html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="'
           + this.state.detail.css[0]
           + '" /></head><body>' + this.state.detail.body
           + '</body></html>';
@@ -93,28 +93,28 @@ export default class StoryDetail extends Component {
             <MyWebView
               style={styles.content}
               html={html}
-              onScrollChange={this.webViewScroll.bind(this)}/>
-            <Animated.View style={[styles.header, {transform: [{translateY}]}]}>
+              onScrollChange={this.webViewScroll.bind(this)} />
+            <Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
               <Image
                 ref={'header'}
-                source={{uri: this.state.detail.image}}
+                source={{ uri: this.state.detail.image }}
                 style={styles.headerImage} >
                 <View style={styles.titleContainer}>
                   <Text style={styles.title}>
                     {this.props.stories.title}
                   </Text>
-                </View> 
+                </View>
               </Image>
             </Animated.View>
             <View style={styles.toolbarView}>
               <View style={styles.toolbar}>
                 <TouchableOpacity onPress={this.onExit.bind(this)}>
-                  <Image style={styles.navIcon} source={require('image!ic_back_white')}/>
+                  <Image style={styles.navIcon} source={require('image!ic_back_white')} />
                 </TouchableOpacity>
                 <Text style={styles.navTitle}>Story</Text>
               </View>
             </View>
-          </View> 
+          </View>
         )
       } else {
         return (
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    top:56,
+    top: 56,
   },
 
   navIcon: {

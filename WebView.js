@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
   View,
-  Text, 
+  Text,
   StyleSheetrequireNativeComponent,
   requireNativeComponent
 } from 'react-native';
@@ -36,7 +36,7 @@ ObservableWebView.propTypes = {
 };
 
 var RCTWebView = requireNativeComponent('RCTWebView', ObservableWebView, {
-  nativeOnly: {onChange: true}
+  nativeOnly: { onChange: true }
 });
 
 module.exports = ObservableWebView;
