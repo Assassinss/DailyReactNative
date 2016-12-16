@@ -12,7 +12,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import MyWebView from './WebView';
+import MyWebView from './webView';
 import Loading from './loading';
 
 var STORY_URL = "http://news-at.zhihu.com/api/4/news/";
@@ -25,7 +25,7 @@ export default class StoryDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: true,
       detail: null,
       url: null,
       scrollY: 0,
@@ -39,10 +39,6 @@ export default class StoryDetail extends Component {
 
   loadStoryDetail() {
     var url = STORY_URL + this.props.stories.id;
-    this.setState({
-      isLoading: true,
-      detail: null
-    });
     fetch(url)
       .then((response) => response.json())
       .catch((error) => {
@@ -71,10 +67,6 @@ export default class StoryDetail extends Component {
   }
 
   render() {
-    if (this.state.detail == null) {
-      return <Loading text={'网络出错了...'}/>
-    }
-
     if (this.state.isLoading) {
       return <Loading text={'正在加载...'} />
     } else {

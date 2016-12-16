@@ -10,10 +10,10 @@ import {
   BackAndroid
 } from 'react-native';
 
-import SplashScreen from './SplashScreen';
-import MainScreen from './MainScreen';
+import SplashScreen from './splash';
+import MainScreen from './main';
 import TimerMixin from 'react-timer-mixin';
-import StoryDetail from './StoryDetail';
+import StoryDetail from './storyDetail';
 
 var _navigator;
 

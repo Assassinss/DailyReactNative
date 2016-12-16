@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import Animated from 'Animated';
-import Data from './Data';
+import Data from './data';
 import Loading from './loading';
 
 var data = new Data();

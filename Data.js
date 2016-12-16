@@ -17,8 +17,8 @@ function Data() {
 
 Data.prototype.safeStorage = function (key) {
   return new Promise((resolve, reject) => {
-    AsyncStorage.getItem(key, (error, resutl) => {
-      var resultData = JSON.parse(resutl);
+    AsyncStorage.getItem(key, (error, result) => {
+      var resultData = JSON.parse(result);
       if (error) {
         console.error(error);
         resolve(null);
