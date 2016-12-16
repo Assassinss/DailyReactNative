@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import MyWebView from './WebView';
+import Loading from './loading';
 
 var STORY_URL = "http://news-at.zhihu.com/api/4/news/";
 
@@ -38,7 +39,6 @@ export default class StoryDetail extends Component {
 
   loadStoryDetail() {
     var url = STORY_URL + this.props.stories.id;
-    console.log("url: " + url);
     this.setState({
       isLoading: true,
       detail: null
@@ -48,11 +48,11 @@ export default class StoryDetail extends Component {
       .catch((error) => {
         this.setState({
           isLoading: false,
+          error: true,
           detail: null
         });
       })
       .then((responseData) => {
-        console.log(responseData.css[0]);
         this.setState({
           isLoading: false,
           detail: responseData,
@@ -71,14 +71,12 @@ export default class StoryDetail extends Component {
   }
 
   render() {
+    if (this.state.detail == null) {
+      return <Loading text={'网络出错了...'}/>
+    }
+
     if (this.state.isLoading) {
-      return (
-        <View style={[styles.container, styles.center]}>
-          <Text>
-            正在加载...
-          </Text>
-        </View>
-      )
+      return <Loading text={'正在加载...'} />
     } else {
       if (this.state.detail) {
         var translateY = this.state.scrollValue.interpolate({
@@ -117,13 +115,7 @@ export default class StoryDetail extends Component {
           </View>
         )
       } else {
-        return (
-          <View style={[styles.container, styles.center]}>
-            <Text>
-              加载失败
-            </Text>
-          </View>
-        )
+        return <Loading text={'加载失败..'} />
       }
     }
   }

@@ -40,7 +40,7 @@ Data.prototype.updateCover = function () {
       AsyncStorage.setItem(KEY_COVER, JSON.stringify(responseData));
     })
     .catch((error) => {
-      console.error(error);
+      console.log(error);
     })
     .done();
 }

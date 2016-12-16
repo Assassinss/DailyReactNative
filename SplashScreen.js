@@ -9,6 +9,7 @@ import {
 
 import Animated from 'Animated';
 import Data from './Data';
+import Loading from './loading';
 
 var data = new Data();
 
@@ -17,6 +18,7 @@ export default class SplashScreen extends Component {
     super(props);
     this.state = {
       img: null,
+      loadingFailure: false,
       bounceValue: new Animated.Value(0),
     };
   }
@@ -29,7 +31,7 @@ export default class SplashScreen extends Component {
         }
       })
       .catch((error) => {
-        console.error(error);
+        this.setState({ img: null, loadingFailure: true });
       })
       .done();
     data.updateCover();
@@ -54,16 +56,21 @@ export default class SplashScreen extends Component {
     } else {
       cover = { uri: 'https://pic4.zhimg.com/v2-b427763c3d75885c041d4de069923e93.jpg' };
     }
-    return (
-      <Animated.Image
-        source={cover}
-        style={{
-          flex: 1,
-          transform: [
-            { scale: this.state.bounceValue },
-          ]
-        }}
-        />
-    );
+
+    if (this.state.loadingFailure) {
+      return <Loading text={'加载出错了..'} />
+    } else {
+      return (
+        <Animated.Image
+          source={cover}
+          style={{
+            flex: 1,
+            transform: [
+              { scale: this.state.bounceValue },
+            ]
+          }}
+          />
+      )
+    }
   }
 }

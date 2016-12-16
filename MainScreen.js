@@ -15,6 +15,8 @@ import {
   RefreshControl
 } from 'react-native';
 
+import Loading from './loading';
+
 var API_LATEST_URL = "http://news-at.zhihu.com/api/4/news/latest";
 var API_BEFORE_URL = "http://news.at.zhihu.com/api/4/news/before/";
 var isFirstin = true;
@@ -32,7 +34,7 @@ export default class MainScreen extends Component {
       }),
       isLoading: false,
       isLoadingTail: false,
-      isRefresh: false,
+      isRefresh: false
     };
   }
 
@@ -52,21 +54,22 @@ export default class MainScreen extends Component {
     var api;
     if (!isFirstin) api = API_BEFORE_URL + this.getDate(dayCount);
     else api = API_LATEST_URL;
+
     fetch(api)
       .then((response) => response.json())
-      .catch((error) => {
-        this.setState({
-          isLoading: (isRefresh ? false : this.state.isLoading),
-          isLoadingTail: (isRefresh ? this.state.isLoadingTail : false),
-          dataSource: this.state.dataSource,
-        });
-      })
       .then((responseData) => {
         this.addDatas(responseData.stories);
         this.setState({
           isLoading: (isRefresh ? false : this.state.isLoading),
           isLoadingTail: (isRefresh ? this.state.isLoadingTail : false),
           dataSource: this.getDataSource(datas)
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({
+          isLoading: (isRefresh ? false : this.state.isLoading),
+          isLoadingTail: (isRefresh ? this.state.isLoadingTail : false)
         });
       })
       .done();
@@ -108,8 +111,8 @@ export default class MainScreen extends Component {
           <Image
             source={{ uri: stories.images[0] }}
             style={styles.thumbnail} />
-          <Text
-            style={styles.title}>{stories.title}
+          <Text style={styles.title}>
+            {stories.title}
           </Text>
         </View>
       </TouchableOpacity >
@@ -133,13 +136,7 @@ export default class MainScreen extends Component {
 
   render() {
     if (this.state.isLoadingTail) {
-      return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text>
-            正在加载...
-          </Text>
-        </View>
-      )
+      return <Loading text={'正在加载..'} />
     } else {
       return (
         <View style={styles.container}>
@@ -147,23 +144,21 @@ export default class MainScreen extends Component {
             titleColor={'#ffffff'}
             style={styles.toolbar}
             title={'Daily'} />
-          <View style={styles.listContent}>
-            <ListView
-              dataSource={this.state.dataSource}
-              renderRow={this.renderLatest.bind(this)}
-              onEndReached={this.onEndReached.bind(this)}
-              onEndReachedThreshold={datas.length}
-              style={styles.listView}
-              refreshControl={
-                <RefreshControl
-                  refreshing={this.state.isRefresh}
-                  onRefresh={this.onRefresh.bind(this)}
-                  colors={['#ff0000', '#00ff00', '#0000ff']}
-                  progressBackgroundColor="#ffffff"
-                  />
-              }>
-            </ListView>
-          </View>
+          <ListView style={styles.listContent}
+            dataSource={this.state.dataSource}
+            renderRow={this.renderLatest.bind(this)}
+            onEndReached={this.onEndReached.bind(this)}
+            onEndReachedThreshold={datas.length}
+            style={styles.listView}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.isRefresh}
+                onRefresh={this.onRefresh.bind(this)}
+                colors={['#ff0000', '#00ff00', '#0000ff']}
+                progressBackgroundColor="#ffffff"
+                />
+            }>
+          </ListView>
         </View>
       )
     }
@@ -179,9 +174,7 @@ const styles = StyleSheet.create({
 
   listContent: {
     flex: 1,
-    flexDirection: 'column',
-    paddingLeft: 10,
-    paddingRight: 10,
+    flexDirection: 'column'
   },
 
   title: {
