@@ -12,8 +12,9 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import MyWebView from './webView';
-import Loading from './loading';
+import MyWebView from './WebView';
+import Loading from './Loading';
+import BackIcon from './icons/ic_back_white.png';
 
 var STORY_URL = "http://news-at.zhihu.com/api/4/news/";
 
@@ -86,7 +87,6 @@ export default class StoryDetail extends Component {
               onScrollChange={this.webViewScroll.bind(this)} />
             <Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
               <Image
-                ref={'header'}
                 source={{ uri: this.state.detail.image }}
                 style={styles.headerImage} >
                 <View style={styles.titleContainer}>
@@ -99,9 +99,8 @@ export default class StoryDetail extends Component {
             <View style={styles.toolbarView}>
               <View style={styles.toolbar}>
                 <TouchableOpacity onPress={this.onExit.bind(this)}>
-                  <Image style={styles.navIcon} source={require('image!ic_back_white')} />
+                  <Image style={styles.navIcon} source={BackIcon} />
                 </TouchableOpacity>
-                <Text style={styles.navTitle}>Story</Text>
               </View>
             </View>
           </View>

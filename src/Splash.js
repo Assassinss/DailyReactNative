@@ -4,14 +4,15 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
+  Image,
   StyleSheet
 } from 'react-native';
 
 import Animated from 'Animated';
-import Data from './data';
-import Loading from './loading';
+import DataRepository from './DataRepository';
+import Loading from './Loading';
 
-var data = new Data();
+var data = new DataRepository();
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -39,14 +40,30 @@ export default class SplashScreen extends Component {
 
   componentDidMount() {
     this.loadData();
-    this.state.bounceValue.setValue(1);
-    Animated.timing(
-      this.state.bounceValue,
-      {
-        toValue: 1.3,
-        duration: 5000,
-      }
-    ).start();
+    if (this.state.img != null) {
+      this.state.bounceValue.setValue(1);
+      Animated.timing(
+        this.state.bounceValue,
+        {
+          toValue: 1.3,
+          duration: 5000,
+        }
+      ).start();
+    }
+  }
+
+  renderCover() {
+    return <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <View style={{ width: 50, height: 50, backgroundColor: 'powderblue' }} />
+      <View style={{ width: 50, height: 50, backgroundColor: 'skyblue' }} />
+      <View style={{ width: 50, height: 50, backgroundColor: 'steelblue' }} />
+    </View>
   }
 
   render() {
@@ -54,9 +71,8 @@ export default class SplashScreen extends Component {
     if (this.state.img) {
       cover = { uri: this.state.img }
     } else {
-      cover = { uri: 'https://pic4.zhimg.com/v2-b427763c3d75885c041d4de069923e93.jpg' };
+      return this.renderCover();
     }
-
     if (this.state.loadingFailure) {
       return <Loading text={'加载出错了..'} />
     } else {
@@ -69,7 +85,7 @@ export default class SplashScreen extends Component {
               { scale: this.state.bounceValue },
             ]
           }}
-          />
+        />
       )
     }
   }

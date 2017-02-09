@@ -12,26 +12,30 @@ import {
   TouchableNativeFeedback,
   TouchableOpacity,
   TouchableHighlight,
-  RefreshControl
+  RefreshControl,
+  DrawerLayoutAndroid
 } from 'react-native';
 
-import Loading from './loading';
+import Requests from './http/Requests';
+import Loading from './Loading';
+import Themes from './Themes';
+import createDataSource from './utils/createDataSource';
+import getDate from './utils/DateUtils';
+import NavIcon from './icons/ic_menu_white.png';
 
 var API_LATEST_URL = "http://news-at.zhihu.com/api/4/news/latest";
 var API_BEFORE_URL = "http://news.at.zhihu.com/api/4/news/before/";
 var isFirstin = true;
-var newDate = new Date();
 var dayCount = 1;
 var datas = [];
+var requests = new Requests();
 
 export default class MainScreen extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2,
-      }),
+      dataSource: createDataSource(),
       isLoading: false,
       isLoadingTail: false,
       isRefresh: false
@@ -42,23 +46,15 @@ export default class MainScreen extends Component {
     this.loadLatest(true);
   }
 
-  getDate(dayCount) {
-    newDate.setDate(newDate.getDate() + dayCount);
-    var yyyy = newDate.getFullYear().toString();
-    var mm = (newDate.getMonth() + 1).toString();
-    var dd = newDate.getDate().toString();
-    return yyyy + (mm[1] ? mm : "0" + mm[0]) + (dd[1] ? dd : "0" + dd[0]);
-  }
-
   loadLatest(isRefresh) {
-    var api;
-    if (!isFirstin) api = API_BEFORE_URL + this.getDate(dayCount);
-    else api = API_LATEST_URL;
+    var url;
+    if (!isFirstin) url = API_BEFORE_URL + getDate(dayCount);
+    else url = API_LATEST_URL;
 
-    fetch(api)
-      .then((response) => response.json())
-      .then((responseData) => {
-        this.addDatas(responseData.stories);
+    requests.get(url)
+      .then((data) => data.stories)
+      .then((stories) => {
+        this.addDatas(stories);
         this.setState({
           isLoading: (isRefresh ? false : this.state.isLoading),
           isLoadingTail: (isRefresh ? this.state.isLoadingTail : false),
@@ -134,32 +130,44 @@ export default class MainScreen extends Component {
     }, 1500);
   }
 
+  renderNavigationView() {
+    return <Themes />
+  }
+
   render() {
     if (this.state.isLoadingTail) {
       return <Loading text={'正在加载..'} />
     } else {
       return (
-        <View style={styles.container}>
-          <ToolbarAndroid
-            titleColor={'#ffffff'}
-            style={styles.toolbar}
-            title={'Daily'} />
-          <ListView style={styles.listContent}
-            dataSource={this.state.dataSource}
-            renderRow={this.renderLatest.bind(this)}
-            onEndReached={this.onEndReached.bind(this)}
-            onEndReachedThreshold={datas.length}
-            style={styles.listView}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.isRefresh}
-                onRefresh={this.onRefresh.bind(this)}
-                colors={['#ff0000', '#00ff00', '#0000ff']}
-                progressBackgroundColor="#ffffff"
+        <DrawerLayoutAndroid
+          ref={'drawer'}
+          drawerWidth={300}
+          drawerPosition={DrawerLayoutAndroid.positions.left}
+          renderNavigationView={this.renderNavigationView}>
+          <View style={styles.container}>
+            <ToolbarAndroid
+              titleColor={'#ffffff'}
+              style={styles.toolbar}
+              title={'首页'}
+              navIcon={NavIcon}
+              onIconClicked={() => this.refs['drawer'].openDrawer()} />
+            <ListView style={styles.listContent}
+              dataSource={this.state.dataSource}
+              renderRow={this.renderLatest.bind(this)}
+              onEndReached={this.onEndReached.bind(this)}
+              onEndReachedThreshold={datas.length}
+              style={styles.listView}
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.isRefresh}
+                  onRefresh={this.onRefresh.bind(this)}
+                  colors={['#ff0000', '#00ff00', '#0000ff']}
+                  progressBackgroundColor="#ffffff"
                 />
-            }>
-          </ListView>
-        </View>
+              }>
+            </ListView>
+          </View>
+        </DrawerLayoutAndroid>
       )
     }
   }

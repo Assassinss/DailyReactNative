@@ -10,10 +10,10 @@ import {
   BackAndroid
 } from 'react-native';
 
-import SplashScreen from './splash';
-import MainScreen from './main';
+import SplashScreen from './Splash';
+import MainScreen from './Main';
 import TimerMixin from 'react-timer-mixin';
-import StoryDetail from './storyDetail';
+import StoryDetail from './StoryDetail';
 
 var _navigator;
 
@@ -58,7 +58,7 @@ export default class App extends Component {
             style={{ flex: 1 }}
             navigator={navigator}
             stories={route.stories}
-            />
+          />
         </View>
       )
     }
@@ -73,7 +73,7 @@ export default class App extends Component {
           initialRoute={route}
           configureScene={this.configureScene}
           renderScene={this.renderScene}
-          />
+        />
       );
     } else {
       return <SplashScreen />
