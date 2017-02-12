@@ -10,8 +10,6 @@ import {
   ListView,
   Dimensions,
   TouchableNativeFeedback,
-  TouchableOpacity,
-  TouchableHighlight,
   RefreshControl,
   DrawerLayoutAndroid
 } from 'react-native';
@@ -29,6 +27,7 @@ var isFirstin = true;
 var dayCount = 1;
 var datas = [];
 var requests = new Requests();
+var dailyTheme = null;
 
 export default class MainScreen extends Component {
 
@@ -47,11 +46,21 @@ export default class MainScreen extends Component {
   }
 
   loadLatest(isRefresh) {
-    var url;
-    if (!isFirstin) url = API_BEFORE_URL + getDate(dayCount);
-    else url = API_LATEST_URL;
+    if (dailyTheme) {
+      url = 'http://news.at.zhihu.com/api/4/theme/' + dailyTheme.id;
+    } else {
+      if (isRefresh) {
+        url = API_LATEST_URL;
+      } else {
+        url = API_BEFORE_URL + getDate(dayCount);
+      }
+    }
 
     requests.get(url)
+      .then((data) => {
+        if (isRefresh) datas = [];
+        return data;
+      })
       .then((data) => data.stories)
       .then((stories) => {
         this.addDatas(stories);
@@ -81,8 +90,15 @@ export default class MainScreen extends Component {
     return this.state.dataSource.cloneWithRows(stories);
   }
 
+  onSelectTheme(theme) {
+    this.refs['drawer'].closeDrawer();
+    dailyTheme = theme;
+    this.refs['listView'].scrollTo({y: 0, animated: false});
+    this.loadLatest(true);
+  }
+
   onEndReached() {
-    if (this.state.isLoadingTail) {
+    if (this.state.isLoadingTail || dailyTheme) {
       return;
     }
     if (isFirstin) dayCount = 0;
@@ -100,24 +116,28 @@ export default class MainScreen extends Component {
   }
 
   renderLatest(stories) {
+    let image = null;
+    if (stories && stories.images) {
+      image = <Image
+        source={{ uri: stories.images[0] }}
+        style={styles.thumbnail} />
+    }
     return (
-      <TouchableOpacity style={{ flex: 1 }}
+      <TouchableNativeFeedback
+        background={TouchableNativeFeedback.SelectableBackground()}
         onPress={this.selectDaily.bind(this, stories)}>
         <View style={styles.row}>
-          <Image
-            source={{ uri: stories.images[0] }}
-            style={styles.thumbnail} />
+          {image}
           <Text style={styles.title}>
             {stories.title}
           </Text>
         </View>
-      </TouchableOpacity >
+      </TouchableNativeFeedback>
     )
   }
 
   onRefresh() {
     this.setState({ isRefresh: true });
-    datas = [];
     isFirstin = true;
     setTimeout(() => {
       this.setState({
@@ -131,10 +151,11 @@ export default class MainScreen extends Component {
   }
 
   renderNavigationView() {
-    return <Themes />
+    return <Themes onSelectTheme={(theme) => this.onSelectTheme(theme)} />
   }
 
   render() {
+    let title = dailyTheme == null ? "首页" : dailyTheme.name;
     if (this.state.isLoadingTail) {
       return <Loading text={'正在加载..'} />
     } else {
@@ -143,27 +164,26 @@ export default class MainScreen extends Component {
           ref={'drawer'}
           drawerWidth={300}
           drawerPosition={DrawerLayoutAndroid.positions.left}
-          renderNavigationView={this.renderNavigationView}>
+          renderNavigationView={this.renderNavigationView.bind(this)}>
           <View style={styles.container}>
             <ToolbarAndroid
               titleColor={'#ffffff'}
               style={styles.toolbar}
-              title={'首页'}
+              title={title}
               navIcon={NavIcon}
               onIconClicked={() => this.refs['drawer'].openDrawer()} />
-            <ListView style={styles.listContent}
+            <ListView 
+              ref={'listView'}
+              style={styles.listContent}
               dataSource={this.state.dataSource}
               renderRow={this.renderLatest.bind(this)}
               onEndReached={this.onEndReached.bind(this)}
-              onEndReachedThreshold={datas.length}
-              style={styles.listView}
               refreshControl={
                 <RefreshControl
                   refreshing={this.state.isRefresh}
                   onRefresh={this.onRefresh.bind(this)}
                   colors={['#ff0000', '#00ff00', '#0000ff']}
-                  progressBackgroundColor="#ffffff"
-                />
+                  progressBackgroundColor="#ffffff" />
               }>
             </ListView>
           </View>
@@ -187,31 +207,27 @@ const styles = StyleSheet.create({
 
   title: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 16,
+    color: '#000000'
   },
 
   thumbnail: {
-    height: 80,
-    marginRight: 10,
-    width: 80,
+    height: 64,
+    width: 64,
+    marginRight: 16
   },
 
   row: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    padding: 10,
-    marginVertical: 5,
+    padding: 16,
+    margin: 6,
     borderColor: '#dddddd',
     borderStyle: null,
     borderWidth: 0.5,
     borderRadius: 2,
-  },
-
-  listView: {
-    padding: 0,
   },
 
   toolbar: {

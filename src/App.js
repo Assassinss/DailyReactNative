@@ -74,7 +74,7 @@ export default class App extends Component {
           configureScene={this.configureScene}
           renderScene={this.renderScene}
         />
-      );
+      )
     } else {
       return <SplashScreen />
     }

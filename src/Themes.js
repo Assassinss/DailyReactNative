@@ -5,6 +5,7 @@ import {
   View,
   Text,
   ListView,
+  TouchableNativeFeedback,
   StyleSheet
 } from 'react-native';
 import createDataSource from './utils/createDataSource';
@@ -38,16 +39,30 @@ export default class Themes extends Component {
     return (
       <View style={styles.headerContent}>
         <View style={{ height: 150, backgroundColor: 'skyblue' }} />
-        <Text style={styles.headerItemText}>首页</Text>
+        <TouchableNativeFeedback
+          onPress={this.onSelectTheme.bind(this, null)}
+          background={TouchableNativeFeedback.SelectableBackground()} >
+          <View style={{ flex: 1, marginTop: 8 }}>
+            <Text style={styles.headerItemText}>首页</Text>
+          </View>
+        </TouchableNativeFeedback>
       </View>
     )
   }
 
+  onSelectTheme(theme) {
+    this.props.onSelectTheme(theme);
+  }
+
   renderThemes(theme) {
     return (
-      <View style={{ flex: 1 }}>
-        <Text style={styles.text}>{theme.name}</Text>
-      </View>
+      <TouchableNativeFeedback
+        onPress={this.onSelectTheme.bind(this, theme)}
+        background={TouchableNativeFeedback.SelectableBackground()}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.text}>{theme.name}</Text>
+        </View>
+      </TouchableNativeFeedback>
     )
   }
 
@@ -68,11 +83,8 @@ const styles = StyleSheet.create({
   },
 
   headerItemText: {
-    fontSize: 14, 
-    paddingTop: 24,
-    paddingLeft: 16,
-    paddingRight: 16, 
-    paddingBottom: 16,
+    fontSize: 14,
+    padding: 16,
     color: '#000000'
   },
 
