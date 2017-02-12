@@ -19,7 +19,6 @@ import Loading from './Loading';
 import Themes from './Themes';
 import createDataSource from './utils/createDataSource';
 import getDate from './utils/DateUtils';
-import NavIcon from './icons/ic_menu_white.png';
 
 var API_LATEST_URL = "http://news-at.zhihu.com/api/4/news/latest";
 var API_BEFORE_URL = "http://news.at.zhihu.com/api/4/news/before/";
@@ -170,7 +169,7 @@ export default class MainScreen extends Component {
               titleColor={'#ffffff'}
               style={styles.toolbar}
               title={title}
-              navIcon={NavIcon}
+              navIcon={require('image!ic_menu_white_24dp')}
               onIconClicked={() => this.refs['drawer'].openDrawer()} />
             <ListView 
               ref={'listView'}

@@ -11,14 +11,16 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by zsj on 2016/9/22.
+ * @author zsj
  */
 
 public class CustomReactPackage implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+        List<NativeModule> result = new ArrayList<>();
+        result.add(new AndroidShareModule(reactContext));
+        return result;
     }
 
     @Override
@@ -32,4 +34,5 @@ public class CustomReactPackage implements ReactPackage {
         result.add(new ReactWebViewManager());
         return result;
     }
+
 }

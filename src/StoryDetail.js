@@ -9,17 +9,21 @@ import {
   Image,
   PixelRatio,
   Animated,
-  TouchableOpacity
+  TouchableOpacity,
+  NativeModules
 } from 'react-native';
 
 import MyWebView from './WebView';
 import Loading from './Loading';
-import BackIcon from './icons/ic_back_white.png';
 
+var ShareAction = NativeModules.AndroidShare;
 var STORY_URL = "http://news-at.zhihu.com/api/4/news/";
+var SHARE_URL = 'http://daily.zhihu.com/story/';
 
 var PIXELRATIO = PixelRatio.get();
 var HEADER_SIZE = 200;
+var shareUrl = null;
+var title = null;
 
 export default class StoryDetail extends Component {
 
@@ -39,7 +43,9 @@ export default class StoryDetail extends Component {
   }
 
   loadStoryDetail() {
-    var url = STORY_URL + this.props.stories.id;
+    url = STORY_URL + this.props.stories.id;
+    title = this.props.stories.title;
+    shareUrl = SHARE_URL + this.props.stories.id;
     fetch(url)
       .then((response) => response.json())
       .catch((error) => {
@@ -63,8 +69,8 @@ export default class StoryDetail extends Component {
     this.state.scrollValue.setValue(scrollY);
   }
 
-  onExit() {
-    this.props.navigator.pop();
+  onActionSelected() {
+    ShareAction.share(title, shareUrl);
   }
 
   render() {
@@ -72,10 +78,10 @@ export default class StoryDetail extends Component {
       return <Loading text={'正在加载...'} />
     } else {
       if (this.state.detail) {
-        var translateY = this.state.scrollValue.interpolate({
+        let translateY = this.state.scrollValue.interpolate({
           inputRange: [0, HEADER_SIZE, HEADER_SIZE + 1], outputRange: [0, HEADER_SIZE, HEADER_SIZE]
         });
-        var html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="'
+        let html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="'
           + this.state.detail.css[0]
           + '" /></head><body>' + this.state.detail.body
           + '</body></html>';
@@ -96,13 +102,17 @@ export default class StoryDetail extends Component {
                 </View>
               </Image>
             </Animated.View>
-            <View style={styles.toolbarView}>
-              <View style={styles.toolbar}>
-                <TouchableOpacity onPress={this.onExit.bind(this)}>
-                  <Image style={styles.navIcon} source={BackIcon} />
-                </TouchableOpacity>
-              </View>
-            </View>
+            <ToolbarAndroid
+              titleColor={'#ffffff'}
+              style={styles.toolbarView}
+              actions={[{
+                title: 'share', icon: require('image!ic_share_white_24dp'),
+                show: 'always'
+              }]}
+              onActionSelected={this.onActionSelected}
+              title={null}
+              navIcon={require('image!ic_arrow_back_white_24dp')}
+              onIconClicked={() => this.props.navigator.pop()} />
           </View>
         )
       } else {
@@ -128,7 +138,9 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     right: 0,
-    bottom: 0
+    bottom: 0,
+    backgroundColor: '#000000',
+    height: 56
   },
 
   header: {
