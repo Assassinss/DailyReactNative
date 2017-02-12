@@ -2,7 +2,7 @@
 Simple ZhiHu Daily App implemented using React Native.
 
 ##Screenshots
-<img src="screenshots/Screenshot_20170212-184153png" width="216" height="384">
+<img src="screenshots/Screenshot_20170212-184153.png" width="216" height="384">
 <img src="screenshots/Screenshot_20170212-184201.png" width="216" height="384">
 <img src="screenshots/Screenshot_20170212-184207.png" width="216" height="384">
 <img src="screenshots/Screenshot_20170212-184217.png" width="216" height="384">
