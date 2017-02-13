@@ -8,7 +8,7 @@ Simple ZhiHu Daily App implemented using React Native.
 <img src="screenshots/Screenshot_20170212-184217.png" width="216" height="384">
 
 ##Build
-* react native: 0.32.0
+* react native: 0.41.2
 * react-native-cli: 1.0.0
 
 ##Technology Used
