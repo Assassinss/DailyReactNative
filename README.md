@@ -1,17 +1,15 @@
 # DailyReactNative
 Simple ZhiHu Daily App implemented using React Native.
 
-##Screenshots
-<img src="screenshots/Screenshot_20170212-231220.png" width="216" height="384">
-<img src="screenshots/Screenshot_20170212-184201.png" width="216" height="384">
-<img src="screenshots/Screenshot_20170212-231241.png" width="216" height="384">
-<img src="screenshots/Screenshot_20170212-184217.png" width="216" height="384">
+## Screenshots
+<img src="screenshots/Screenshot_20170212-231220.png" width="216" height="384"> <img src="screenshots/Screenshot_20170212-184201.png" width="216" height="384">
+<img src="screenshots/Screenshot_20170212-231241.png" width="216" height="384"> <img src="screenshots/Screenshot_20170212-184217.png" width="216" height="384">
 
-##Build
+## Build
 * react native: 0.41.2
 * react-native-cli: 1.0.0
 
-##Technology Used
+## Technology Used
 * Flex Style
 * DrawerLayoutAndroid
 * Create Native module
@@ -23,8 +21,8 @@ Simple ZhiHu Daily App implemented using React Native.
 * AsyncStorage
 * Animations
 
-##Thanks
+## Thanks
 [ZhihuDaily-React-Native](https://github.com/race604/ZhiHuDaily-React-Native/)
 
-##LICENSE
+## LICENSE
 * MIT License
